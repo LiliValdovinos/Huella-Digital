@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 HuellaDigital IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .phone-container {
+            width: 375px;
+            height: 667px;
+            background: #F8F9FA;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid #1a1a1a;
+        }
+
+        .screen {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            background: #F8F9FA;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .app-header {
+            padding: 20px 24px 30px;
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .app-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .app-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: white;
+            text-align: center;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px 80px;
+            margin-top: -15px;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(76,175,80,0.05) 0%, rgba(33,150,243,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:active {
+            transform: scale(0.98);
+        }
+
+        .icon-container {
+            min-width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .icon-container.leaf {
+            background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+            box-shadow: 0 8px 20px rgba(76,175,80,0.3);
+        }
+
+        .icon-container.trophy {
+            background: linear-gradient(135deg, #FFC107 0%, #FFD54F 100%);
+            box-shadow: 0 8px 20px rgba(255,193,7,0.3);
+        }
+
+        .icon-container.gift {
+            background: linear-gradient(135deg, #E91E63 0%, #F48FB1 100%);
+            box-shadow: 0 8px 20px rgba(233,30,99,0.3);
+        }
+
+        .icon-container.community {
+            background: linear-gradient(135deg, #2196F3 0%, #64B5F6 100%);
+            box-shadow: 0 8px 20px rgba(33,150,243,0.3);
+        }
+
+        .feature-content {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .arrow-icon {
+            font-size: 20px;
+            color: #999;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            color: white;
+            box-shadow: 0 8px 30px rgba(102,126,234,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '🌍';
+            position: absolute;
+            font-size: 120px;
+            top: -20px;
+            right: -20px;
+            opacity: 0.15;
+        }
+
+        .stats-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stats-value {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            margin-bottom: 4px;
+        }
+
+        .stats-label {
+            font-size: 16px;
+            opacity: 0.85;
+        }
+
+        .nav-bar {
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 12px;
+            position: relative;
+            user-select: none;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50 0%, #2196F3 100%);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-item.active::before {
+            width: 32px;
+        }
+
+        .nav-icon {
+            font-size: 28px;
+            margin-bottom: 4px;
+            transition: transform 0.3s ease;
+            filter: grayscale(1);
+            opacity: 0.5;
+        }
+
+        .nav-item.active .nav-icon {
+            filter: grayscale(0);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item.active .nav-label {
+            background: linear-gradient(90deg, #4CAF50 0%, #2196F3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-ring-container {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .progress-number {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            color: #4CAF50;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: -4px;
+        }
+
+        .challenge-item {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            border: 2px solid #F0F0F0;
+            transition: all 0.3s ease;
+        }
+
+        .challenge-item:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 4px 20px rgba(76,175,80,0.15);
+        }
+
+        .challenge-item.completed {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-color: #4CAF50;
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .challenge-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1a1a1a;
+        }
+
+        .challenge-emoji {
+            font-size: 28px;
+        }
+
+        .challenge-desc {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            background: #E8F5E9;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4CAF50 0%, #2196F3 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.8s ease;
+            box-shadow: 0 0 10px rgba(76,175,80,0.5);
+        }
+
+        .progress-percentage {
+            font-size: 12px;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .btn-challenge {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-challenge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76,175,80,0.3);
+        }
+
+        .btn-challenge:active {
+            transform: translateY(0);
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .achievement-badge {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .achievement-badge:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .achievement-badge.locked {
+            opacity: 0.35;
+            filter: grayscale(1);
+        }
+
+        .achievement-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .achievement-name {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .leaderboard-item {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .leaderboard-item.first {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            box-shadow: 0 6px 25px rgba(255,215,0,0.4);
+        }
+
+        .leaderboard-item.current-user {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            border: 2px solid #2196F3;
+        }
+
+        .rank-badge {
+            min-width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .leaderboard-item.first .rank-badge {
+            background: white;
+            color: #FFA500;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+
+        .leaderboard-item.first .user-name {
+            color: white;
+        }
+
+        .user-score {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .leaderboard-item.first .user-score {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .score-badge {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: #4CAF50;
+        }
+
+        .leaderboard-item.first .score-badge {
+            color: white;
+            font-size: 24px;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: #1a1a1a;
+            margin: 20px 0 15px;
+        }
+
+        .reward-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reward-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .reward-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #E91E63 0%, #F48FB1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .reward-info {
+            flex: 1;
+        }
+
+        .reward-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .reward-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .reward-points {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #E91E63;
+        }
+
+        .points-balance {
+            background: linear-gradient(135deg, #E91E63 0%, #F48FB1 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(233,30,99,0.3);
+        }
+
+        .points-balance .label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .points-balance .value {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 48px;
+        }
+
+        .share-section {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-share {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-share:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76,175,80,0.3);
+        }
+
+        .btn-share:active {
+            transform: translateY(0);
+        }
+
+        .calculator-form {
+            margin: 20px 0;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .btn-update {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-update:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+
+        .btn-update:active {
+            transform: translateY(0);
+        }
+
+        .ai-recommendation {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            margin-top: 20px;
+            box-shadow: 0 6px 25px rgba(102,126,234,0.3);
+        }
+
+        .ai-header {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .ai-text {
+            font-size: 14px;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 300px;
+            margin: 20px;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- Pantalla 1: Inicio -->
+        <div class="screen active" id="home">
+            <div class="status-bar">
+                <div id="current-time">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-header">
+                <div class="app-title">HuellaDigital IA</div>
+            </div>
+
+            <div class="content">
+                <div class="stats-card">
+                    <div class="stats-title">Tu impacto este mes</div>
+                    <div class="stats-value" id="monthly-impact">2.3t</div>
+                    <div class="stats-label">CO₂ reducido</div>
+                </div>
+
+                <div class="feature-card" onclick="navigateTo('calculator')">
+                    <div class="icon-container leaf">🌿</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Mi huella diaria</div>
+                        <div class="feature-description">Calcula tu huella de carbono</div>
+                    </div>
+                    <div class="arrow-icon">›</div>
+                </div>
+
+                <div class="feature-card" onclick="navigateTo('challenges')">
+                    <div class="icon-container trophy">🏆</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Retos sostenibles</div>
+                        <div class="feature-description">¡Intenta cumplir retos!</div>
+                    </div>
+                    <div class="arrow-icon">›</div>
+                </div>
+
+                <div class="feature-card" onclick="navigateTo('rewards')">
+                    <div class="icon-container gift">🎁</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Recompensas</div>
+                        <div class="feature-description">Gana puntos y premios</div>
+                    </div>
+                    <div class="arrow-icon">›</div>
+                </div>
+
+                <div class="feature-card" onclick="navigateTo('community')">
+                    <div class="icon-container community">👥</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Comunidad</div>
+                        <div class="feature-description">Comparte tus avances</div>
+                    </div>
+                    <div class="arrow-icon">›</div>
+                </div>
+            </div>
+
+            <div class="nav-bar">
+                <div class="nav-item active" onclick="navigateTo('home')">
+                    <div class="nav-icon">🌿</div>
+                    <div class="nav-label">Inicio</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('challenges')">
+                    <div class="nav-icon">🏆</div>
+                    <div class="nav-label">Retos</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('rewards')">
+                    <div class="nav-icon">🎁</div>
+                    <div class="nav-label">Premios</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('community')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Social</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 2: Calculadora -->
+        <div class="screen" id="calculator">
+            <div class="status-bar">
+                <div id="current-time-calc">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-header">
+                <div class="app-title">Mi Huella Diaria</div>
+            </div>
+
+            <div class="content">
+                <div class="progress-ring-container">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle stroke="#E8F5E9" stroke-width="10" fill="transparent" r="52" cx="60" cy="60"/>
+                        <circle class="progress-ring-circle" stroke="url(#gradient)" stroke-width="10" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="81.68" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#2196F3;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="progress-text">
+                        <div class="progress-number" id="daily-percentage">75%</div>
+                        <div class="progress-label">Mejor que ayer</div>
+                    </div>
+                </div>
+
+                <div class="calculator-form">
+                    <div class="form-section">
+                        <label class="form-label">🚗 Transporte (km en auto)</label>
+                        <input type="number" id="transport-input" class="form-input" value="12" min="0">
+                        <button class="btn-update" onclick="updateTransport()">Actualizar</button>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">💡 Energía (kWh consumidos)</label>
+                        <input type="number" id="energy-input" class="form-input" value="8" min="0">
+                        <button class="btn-update" onclick="updateEnergy()">Actualizar</button>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">🍽️ Comidas con carne hoy</label>
+                        <input type="number" id="food-input" class="form-input" value="2" min="0" max="5">
+                        <button class="btn-update" onclick="updateFood()">Actualizar</button>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">💧 Agua (litros usados)</label>
+                        <input type="number" id="water-input" class="form-input" value="85" min="0">
+                        <button class="btn-update" onclick="updateWater()">Actualizar</button>
+                    </div>
+                </div>
+
+                <div class="challenge-item" id="transport-stat">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Transporte</div>
+                        <div class="challenge-emoji">🚗</div>
+                    </div>
+                    <div class="challenge-desc" id="transport-desc">12 km en auto hoy</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="transport-progress" style="width: 60%;"></div>
+                    </div>
+                    <div class="progress-percentage" id="transport-co2">0.8 kg CO₂</div>
+                </div>
+
+                <div class="challenge-item" id="energy-stat">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Energía en casa</div>
+                        <div class="challenge-emoji">💡</div>
+                    </div>
+                    <div class="challenge-desc" id="energy-desc">Consumo eléctrico del día</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="energy-progress" style="width: 45%;"></div>
+                    </div>
+                    <div class="progress-percentage" id="energy-co2">0.5 kg CO₂</div>
+                </div>
+
+                <div class="challenge-item" id="food-stat">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Alimentación</div>
+                        <div class="challenge-emoji">🍽️</div>
+                    </div>
+                    <div class="challenge-desc" id="food-desc">2 comidas con carne</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="food-progress" style="width: 70%;"></div>
+                    </div>
+                    <div class="progress-percentage" id="food-co2">1.2 kg CO₂</div>
+                </div>
+
+                <div class="challenge-item" id="water-stat">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Consumo de agua</div>
+                        <div class="challenge-emoji">💧</div>
+                    </div>
+                    <div class="challenge-desc" id="water-desc">85 litros usados</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="water-progress" style="width: 35%;"></div>
+                    </div>
+                    <div class="progress-percentage" id="water-co2">0.3 kg CO₂</div>
+                </div>
+
+                <div class="ai-recommendation" id="ai-recommendation">
+                    <div class="ai-header">🤖 Recomendación IA</div>
+                    <div class="ai-text" id="ai-text">Intenta reducir 5 km en auto mañana. ¡Podrías ahorrar 0.3 kg de CO₂!</div>
+                </div>
+            </div>
+
+            <div class="nav-bar">
+                <div class="nav-item" onclick="navigateTo('home')">
+                    <div class="nav-icon">🌿</div>
+                    <div class="nav-label">Inicio</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('challenges')">
+                    <div class="nav-icon">🏆</div>
+                    <div class="nav-label">Retos</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('rewards')">
+                    <div class="nav-icon">🎁</div>
+                    <div class="nav-label">Premios</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('community')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Social</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 3: Retos -->
+        <div class="screen" id="challenges">
+            <div class="status-bar">
+                <div id="current-time-challenges">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-header">
+                <div class="app-title">Retos Sostenibles</div>
+            </div>
+
+            <div class="content">
+                <div class="challenge-item clickable" id="challenge-1" onclick="completeChallenge(1)">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Semana sin auto</div>
+                        <div class="challenge-emoji">🚴</div>
+                    </div>
+                    <div class="challenge-desc">Usa transporte alternativo 5 días</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="challenge-1-progress" style="width: 60%;"></div>
+                    </div>
+                    <div class="progress-percentage" id="challenge-1-text">3/5 días • 120 puntos</div>
+                    <button class="btn-challenge" onclick="event.stopPropagation(); incrementChallenge(1)">Marcar día completado</button>
+                </div>
+
+                <div class="challenge-item clickable" id="challenge-2" onclick="completeChallenge(2)">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Cero plástico</div>
+                        <div class="challenge-emoji">♻️</div>
+                    </div>
+                    <div class="challenge-desc">Evita plásticos de un solo uso</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="challenge-2-progress" style="width: 40%;"></div>
+                    </div>
+                    <div class="progress-percentage" id="challenge-2-text">2/5 días • 100 puntos</div>
+                    <button class="btn-challenge" onclick="event.stopPropagation(); incrementChallenge(2)">Marcar día completado</button>
+                </div>
+
+                <div class="challenge-item completed" id="challenge-3">
+                    <div class="challenge-header">
+                        <div class="challenge-title">Alimentación vegetal</div>
+                        <div class="challenge-emoji">🌿</div>
+                    </div>
+                    <div class="challenge-desc">3 comidas sin carne esta semana</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="progress-percentage">✓ ¡Completado! +150 puntos</div>
+                </div>
+
+                <div class="section-title">Logros Desbloqueados</div>
+                <div class="achievement-grid">
+                    <div class="achievement-badge" onclick="showAchievement('Primera semana', '¡Completaste tu primera semana en HuellaDigital IA!')">
+                        <div class="achievement-icon">🌟</div>
+                        <div class="achievement-name">Primera semana</div>
+                    </div>
+                    <div class="achievement-badge" onclick="showAchievement('Ciclista urbano', '¡Usaste la bici en lugar del auto 10 veces!')">
+                        <div class="achievement-icon">🚴</div>
+                        <div class="achievement-name">Ciclista urbano</div>
+                    </div>
+                    <div class="achievement-badge" onclick="showAchievement('Reciclador pro', '¡Reciclaste durante 30 días consecutivos!')">
+                        <div class="achievement-icon">♻️</div>
+                        <div class="achievement-name">Reciclador pro</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">🌍</div>
+                        <div class="achievement-name">Héroe global</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-name">100 días</div>
+                    </div>
+                    <div class="achievement-badge locked">
+                        <div class="achievement-icon">💚</div>
+                        <div class="achievement-name">Influencer verde</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-bar">
+                <div class="nav-item" onclick="navigateTo('home')">
+                    <div class="nav-icon">🌿</div>
+                    <div class="nav-label">Inicio</div>
+                </div>
+                <div class="nav-item active" onclick="navigateTo('challenges')">
+                    <div class="nav-icon">🏆</div>
+                    <div class="nav-label">Retos</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('rewards')">
+                    <div class="nav-icon">🎁</div>
+                    <div class="nav-label">Premios</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('community')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Social</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 4: Recompensas -->
+        <div class="screen" id="rewards">
+            <div class="status-bar">
+                <div id="current-time-rewards">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-header">
+                <div class="app-title">Recompensas</div>
+            </div>
+
+            <div class="content">
+                <div class="points-balance">
+                    <div class="label">Tus puntos acumulados</div>
+                    <div class="value" id="total-points">1,250</div>
+                </div>
+
+                <div class="section-title">Canjea tus puntos</div>
+
+                <div class="reward-card clickable" onclick="redeemReward(500, 'Café gratis', '☕')">
+                    <div class="reward-icon">☕</div>
+                    <div class="reward-info">
+                        <div class="reward-title">Café gratis</div>
+                        <div class="reward-desc">En tu cafetería local</div>
+                    </div>
+                    <div class="reward-points">500</div>
+                </div>
+
+                <div class="reward-card clickable" onclick="redeemReward(800, 'Entrada de cine', '🎬')">
+                    <div class="reward-icon">🎬</div>
+                    <div class="reward-info">
+                        <div class="reward-title">Entrada de cine</div>
+                        <div class="reward-desc">Cines participantes</div>
+                    </div>
+                    <div class="reward-points">800</div>
+                </div>
+
+                <div class="reward-card clickable" onclick="redeemReward(1000, 'Planta un árbol', '🌳')">
+                    <div class="reward-icon">🌳</div>
+                    <div class="reward-info">
+                        <div class="reward-title">Planta un árbol</div>
+                        <div class="reward-desc">En tu nombre</div>
+                    </div>
+                    <div class="reward-points">1000</div>
+                </div>
+
+                <div class="reward-card clickable" onclick="redeemReward(600, 'Descuento 20%', '🎫')">
+                    <div class="reward-icon">🎫</div>
+                    <div class="reward-info">
+                        <div class="reward-title">Descuento 20%</div>
+                        <div class="reward-desc">Tiendas eco-friendly</div>
+                    </div>
+                    <div class="reward-points">600</div>
+                </div>
+            </div>
+
+            <div class="nav-bar">
+                <div class="nav-item" onclick="navigateTo('home')">
+                    <div class="nav-icon">🌿</div>
+                    <div class="nav-label">Inicio</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('challenges')">
+                    <div class="nav-icon">🏆</div>
+                    <div class="nav-label">Retos</div>
+                </div>
+                <div class="nav-item active" onclick="navigateTo('rewards')">
+                    <div class="nav-icon">🎁</div>
+                    <div class="nav-label">Premios</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('community')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Social</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 5: Comunidad -->
+        <div class="screen" id="community">
+            <div class="status-bar">
+                <div id="current-time-community">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-header">
+                <div class="app-title">Comunidad</div>
+            </div>
+
+            <div class="content">
+                <div class="section-title">Ranking esta semana</div>
+
+                <div class="leaderboard-item first">
+                    <div class="rank-badge">👑</div>
+                    <div class="user-info">
+                        <div class="user-name">María González</div>
+                        <div class="user-score">15 retos completados</div>
+                    </div>
+                    <div class="score-badge">2,890</div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="rank-badge">2</div>
+                    <div class="user-info">
+                        <div class="user-name">Carlos Ruiz</div>
+                        <div class="user-score">12 retos completados</div>
+                    </div>
+                    <div class="score-badge">2,450</div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="rank-badge">3</div>
+                    <div class="user-info">
+                        <div class="user-name">Ana López</div>
+                        <div class="user-score">10 retos completados</div>
+                    </div>
+                    <div class="score-badge">2,100</div>
+                </div>
+
+                <div class="leaderboard-item current-user">
+                    <div class="rank-badge">4</div>
+                    <div class="user-info">
+                        <div class="user-name">Tú</div>
+                        <div class="user-score" id="user-challenges-completed">8 retos completados</div>
+                    </div>
+                    <div class="score-badge" id="user-leaderboard-score">1,890</div>
+                </div>
+
+                <div class="leaderboard-item">
+                    <div class="rank-badge">5</div>
+                    <div class="user-info">
+                        <div class="user-name">Pedro Martínez</div>
+                        <div class="user-score">7 retos completados</div>
+                    </div>
+                    <div class="score-badge">1,650</div>
+                </div>
+
+                <div class="share-section">
+                    <button class="btn-share" onclick="shareProgress()">
+                        📤 Compartir mi progreso
+                    </button>
+                    <button class="btn-share" onclick="inviteFriend()">
+                        👥 Invitar amigos
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-bar">
+                <div class="nav-item" onclick="navigateTo('home')">
+                    <div class="nav-icon">🌿</div>
+                    <div class="nav-label">Inicio</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('challenges')">
+                    <div class="nav-icon">🏆</div>
+                    <div class="nav-label">Retos</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('rewards')">
+                    <div class="nav-icon">🎁</div>
+                    <div class="nav-label">Premios</div>
+                </div>
+                <div class="nav-item active" onclick="navigateTo('community')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Social</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de notificación -->
+        <div class="modal" id="notification-modal">
+            <div class="modal-content">
+                <div class="modal-icon" id="modal-icon">🎉</div>
+                <div class="modal-title" id="modal-title">¡Título!</div>
+                <div class="modal-text" id="modal-text">Mensaje de la notificación</div>
+                <button class="modal-btn" onclick="closeModal()">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(screenId) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => screen.classList.remove('active'));
+            
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) targetScreen.classList.add('active');
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            const activeScreen = document.querySelector('.screen.active');
+            if (activeScreen) {
+                const activeNavItems = activeScreen.querySelectorAll('.nav-item');
+                activeNavItems.forEach(item => {
+                    const navLabel = item.querySelector('.nav-label').textContent.toLowerCase();
+                    const screenMap = {
+                        'inicio': 'home',
+                        'retos': 'challenges',
+                        'premios': 'rewards',
+                        'social': 'community'
+                    };
+                    
+                    if (screenMap[navLabel] === screenId) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        function updateTransport() {
+            const km = parseFloat(document.getElementById('transport-input').value) || 0;
+            const co2 = (km * 0.12).toFixed(1);
+            const percentage = Math.min((km / 20) * 100, 100);
+            
+            document.getElementById('transport-desc').textContent = `${km} km en auto hoy`;
+            document.getElementById('transport-co2').textContent = `${co2} kg CO₂`;
+            document.getElementById('transport-progress').style.width = `${percentage}%`;
+            
+            updateAIRecommendation();
+            showModal('🚗', '¡Actualizado!', `Transporte actualizado: ${km} km`);
+        }
+
+        function updateEnergy() {
+            const kwh = parseFloat(document.getElementById('energy-input').value) || 0;
+            const co2 = (kwh * 0.5).toFixed(1);
+            const percentage = Math.min((kwh / 15) * 100, 100);
+            
+            document.getElementById('energy-desc').textContent = `${kwh} kWh consumidos hoy`;
+            document.getElementById('energy-co2').textContent = `${co2} kg CO₂`;
+            document.getElementById('energy-progress').style.width = `${percentage}%`;
+            
+            updateAIRecommendation();
+            showModal('💡', '¡Actualizado!', `Energía actualizada: ${kwh} kWh`);
+        }
+
+        function updateFood() {
+            const meals = parseFloat(document.getElementById('food-input').value) || 0;
+            const co2 = (meals * 2.5).toFixed(1);
+            const percentage = Math.min((meals / 3) * 100, 100);
+            
+            document.getElementById('food-desc').textContent = `${meals} comidas con carne`;
+            document.getElementById('food-co2').textContent = `${co2} kg CO₂`;
+            document.getElementById('food-progress').style.width = `${percentage}%`;
+            
+            updateAIRecommendation();
+            showModal('🍽️', '¡Actualizado!', `Alimentación actualizada: ${meals} comidas`);
+        }
+
+        function updateWater() {
+            const liters = parseFloat(document.getElementById('water-input').value) || 0;
+            const co2 = (liters * 0.003).toFixed(1);
+            const percentage = Math.min((liters / 150) * 100, 100);
+            
+            document.getElementById('water-desc').textContent = `${liters} litros usados`;
+            document.getElementById('water-co2').textContent = `${co2} kg CO₂`;
+            document.getElementById('water-progress').style.width = `${percentage}%`;
+            
+            updateAIRecommendation();
+            showModal('💧', '¡Actualizado!', `Agua actualizada: ${liters} litros`);
+        }
+
+        function updateAIRecommendation() {
+            const recommendations = [
+                'Intenta reducir 5 km en auto mañana. ¡Podrías ahorrar 0.3 kg de CO₂!',
+                'Considera usar transporte público. ¡Reducirías hasta 2 kg de CO₂ al día!',
+                'Desconecta aparatos electrónicos cuando no los uses. ¡Ahorra energía!',
+                'Una comida vegetariana al día puede reducir 2.5 kg de CO₂.',
+                'Cierra el grifo mientras te cepillas los dientes. ¡Ahorras agua y energía!'
+            ];
+            
+            const randomRec = recommendations[Math.floor(Math.random() * recommendations.length)];
+            document.getElementById('ai-text').textContent = randomRec;
+        }
+
+        let challengeData = {
+            1: { current: 3, total: 5, points: 120 },
+            2: { current: 2, total: 5, points: 100 }
+        };
+
+        function incrementChallenge(challengeId) {
+            if (challengeData[challengeId]) {
+                const data = challengeData[challengeId];
+                
+                if (data.current < data.total) {
+                    data.current++;
+                    const percentage = (data.current / data.total) * 100;
+                    
+                    document.getElementById(`challenge-${challengeId}-progress`).style.width = `${percentage}%`;
+                    document.getElementById(`challenge-${challengeId}-text`).textContent = 
+                        `${data.current}/${data.total} días • ${data.points} puntos`;
+                    
+                    if (data.current === data.total) {
+                        completeChallenge(challengeId);
+                    } else {
+                        showModal('🎉', '¡Progreso!', `¡Día ${data.current} completado! Sigue así.`);
+                    }
+                }
+            }
+        }
+
+        function completeChallenge(challengeId) {
+            const challenge = document.getElementById(`challenge-${challengeId}`);
+            if (challenge && !challenge.classList.contains('completed')) {
+                challenge.classList.add('completed');
+                const data = challengeData[challengeId];
+                if (data) {
+                    showModal('🏆', '¡Reto Completado!', `¡Felicidades! Has ganado ${data.points} puntos.`);
+                    updatePoints(data.points);
+                }
+            }
+        }
+
+        function showAchievement(title, description) {
+            showModal('🏆', title, description);
+        }
+
+        let totalPoints = 1250;
+
+        function updatePoints(points) {
+            totalPoints += points;
+            const pointsElement = document.getElementById('total-points');
+            if (pointsElement) {
+                pointsElement.textContent = totalPoints.toLocaleString();
+            }
+        }
+
+        function redeemReward(cost, rewardName, emoji) {
+            if (totalPoints >= cost) {
+                totalPoints -= cost;
+                document.getElementById('total-points').textContent = totalPoints.toLocaleString();
+                showModal(emoji, '¡Recompensa Canjeada!', `Has canjeado: ${rewardName}`);
+            } else {
+                const needed = cost - totalPoints;
+                showModal('😔', 'Puntos Insuficientes', `Te faltan ${needed} puntos para canjear esta recompensa.`);
+            }
+        }
+
+        function shareProgress() {
+            showModal('📤', '¡Compartido!', 'Tu progreso ha sido compartido con tus amigos.');
+        }
+
+        function inviteFriend() {
+            showModal('👥', 'Invitar Amigos', 'Enlace de invitación copiado al portapapeles.');
+        }
+
+        function showModal(icon, title, text) {
+            document.getElementById('modal-icon').textContent = icon;
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-text').textContent = text;
+            document.getElementById('notification-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('notification-modal').classList.remove('active');
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            
+            const timeElements = [
+                'current-time',
+                'current-time-calc',
+                'current-time-challenges',
+                'current-time-rewards',
+                'current-time-community'
+            ];
+            
+            timeElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = timeString;
+            });
+        }
+
+        setInterval(updateTime, 60000);
+        updateTime();
+
+        document.getElementById('notification-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
